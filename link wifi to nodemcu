@@ -1,0 +1,36 @@
+#include<ESP8266WiFi.h>
+WiFiServer server(81);
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(D0,1);
+Serial.begin(9600);
+WiFi.disconnect();
+WiFi.begin("html","katkot@1998");
+while(!(WiFi.status()==WL_CONNECTED)){
+Serial.print(".");
+delay(100);
+}
+Serial.println("\nWIFI IS CONNECTED");
+Serial.println(WiFi.localIP());
+server.begin();
+}
+String s;
+void loop() {
+  // put your main code here, to run repeatedly:
+WiFiClient client = server.available();
+if(!client) {return; }
+while(!client.available()) {delay(1);}
+s = client.readStringUntil('\n');
+s.remove(0,5);
+s.remove(s.length()-10,s.length());
+Serial.println(s);
+if(s == "A")
+{
+  digitalWrite(D0,!digitalRead(D0));
+  }
+client.stop();
+
+
+
+
+}
